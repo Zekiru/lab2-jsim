@@ -47,7 +47,24 @@
     X4 x y z out nand3
 .ends
 
-Xfx clk1 clk2 clk3 clk4 clk5 clk6 clk7 out fx
+* SUM = A ⊕ B ⊕ C_IN
+* C_OUT = AB + (A ⊕ B) C_IN = ![!(AB) !((A ⊕ B) C_IN)]
+.subckt fa a b c_in sum c_out
+    Xsum1 a b i xor2
+    Xsum2 i c_in sum xor2
+    Xc_out1 a b j nand2
+    Xc_out2 i c_in k nand2
+    Xc_out3 j k c_out nand2
+.ends
+
+* Xfx clk1 clk2 clk3 clk4 clk5 clk6 clk7 out fx
+
+* Full-Adder
+Xc1 a constant1
+Xc2 b constant0
+Xc3 c constant1
+
+Xfa a b c sum c_out fa
 
 *******************************************************************************
 * The circuit above does NOT display anything in the simulator. We tell JSim
@@ -60,15 +77,12 @@ Xfx clk1 clk2 clk3 clk4 clk5 clk6 clk7 out fx
 * ".plot clk1 out" instead, but it will be hard to see any overlaps in signal.)
 *******************************************************************************
 
-.tran 640ns
-.plot clk1
-.plot clk2
-.plot clk3
-.plot clk4
-.plot clk5
-.plot clk6
-.plot clk7
-.plot out
+.tran 10ns
+.plot a
+.plot b
+.plot c
+.plot sum
+.plot c_out
 
 
 *******************************************************************************
