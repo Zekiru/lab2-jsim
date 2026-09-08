@@ -39,8 +39,15 @@
 * inverter is the type of subcircuit that we want (defined in stdcell.jsim).
 *******************************************************************************
 
-Xinv clk1 out inverter
+* OUT = AB + CDE + FG = ![!(AB) !(CDE) !(FG)]
+.subckt fx a b c d e f g out
+    X1 a b x nand2
+    X2 c d e y nand3
+    X3 f g z nand2
+    X4 x y z out nand3
+.ends
 
+Xfx clk1 clk2 clk3 clk4 clk5 clk6 clk7 out fx
 
 *******************************************************************************
 * The circuit above does NOT display anything in the simulator. We tell JSim
@@ -53,8 +60,14 @@ Xinv clk1 out inverter
 * ".plot clk1 out" instead, but it will be hard to see any overlaps in signal.)
 *******************************************************************************
 
-.tran 10ns
+.tran 640ns
 .plot clk1
+.plot clk2
+.plot clk3
+.plot clk4
+.plot clk5
+.plot clk6
+.plot clk7
 .plot out
 
 
